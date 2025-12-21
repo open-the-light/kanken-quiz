@@ -13,7 +13,7 @@ def read_kanken_kanji_list() -> pd.DataFrame:
 def write_kanken_kanji_list_to_db(df: pd.DataFrame) -> None:
     con = sqlite3.connect("./data/kanken_quiz.db")
     
-    df.to_sql('kanji', con, if_exists='replace', index=True)
+    df.to_sql('kanji_list', con, if_exists='replace', index=True)
     con.close()
 
 

@@ -8,4 +8,5 @@ dependencies = [
     "jamdict>=0.1a11.post2",
     "jamdict-data>=1.5",
     "pandas>=2.3.3",
+    "prompt-toolkit>=3.0.52",
 ]
