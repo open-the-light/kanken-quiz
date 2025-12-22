@@ -1,5 +1,3 @@
-import os
-import sys
 import argparse
 from prompt_toolkit import prompt
 from scripts.dictionary_mode import DictionaryMode
@@ -19,13 +17,13 @@ def main():
 
     if args.dict:
         print("Entering Dictionary Mode!")
+        kanji_dict = DictionaryMode()
         print("Enter a character you would like to seach the dictionary for:")
         while True:
             search_term = prompt(">>> ")
             if search_term in ["exit", "quit"]:
                 print("Leaving search screen")
                 break
-            kanji_dict = DictionaryMode()
             kanji_dict.search_db(search_term)
         kanji_dict.shutdown()
     else:
