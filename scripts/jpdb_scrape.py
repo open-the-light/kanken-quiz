@@ -4,16 +4,18 @@ import pandas as pd
 import sqlite3
 from typing import List, Dict
 from bs4 import BeautifulSoup
+from database_helpers import *
 
 
-def get_vocab_from_jpdb(kanji_to_search: List[str]) -> pd.DataFrame:
-    kanji = []
+def get_vocab_from_jpdb(df: pd.DataFrame) -> pd.DataFrame:
+    char_id = []
     goi_index = []
     goi = []
     reading = []
     meaning = []
-    for k in kanji_to_search:
-        url = f"https://jpdb.io/kanji/{k}?expand=v#used_in_{k}_v"
+    for row in df.itertuples():
+        print(row.kanji)
+        url = f"https://jpdb.io/kanji/{row.kanji}?expand=v#used_in_{row.kanji}_v"
         response = requests.get(url)
         response.raise_for_status()
 
@@ -29,14 +31,15 @@ def get_vocab_from_jpdb(kanji_to_search: List[str]) -> pd.DataFrame:
             jp = re.search(r'/vocabulary/[0-9]*/(.*)#a$', jp_link)
             jp_text = jp.group(1).split('/')
             eng = el.find('div', class_='en').contents
-            kanji.append(k)
+            char_id.append(row.char_id)
             goi_index.append(i+1)
-            goi.append(jp_text[0])
-            reading.append(jp_text[1])
-            meaning.append(eng[0])
+            goi.append(str(jp_text[0]))
+            reading.append(str(jp_text[1]))
+            meaning.append(str(eng[0]))
+            #print(f"{row.kanji} -- goi: {jp_text[0]} -- reading: {jp_text[1]} -- meaning: {eng[0]}")
     
     r_dict = {
-        'kanji': kanji,
+        'char_id': char_id,
         'goi_index': goi_index,
         'goi': goi,
         'reading': reading,
@@ -46,14 +49,11 @@ def get_vocab_from_jpdb(kanji_to_search: List[str]) -> pd.DataFrame:
 
 
 def write_goi_to_database(df: pd.DataFrame) -> None:
-    con = sqlite3.connect("./data/kanken_quiz.db")
-    
-    df.to_sql('goi_list', con, if_exists='append', index=False)
-    con.close()
+    with sqlite3.connect("./data/kanken_quiz.db") as conn:
+        df.to_sql('goi_list', conn, if_exists='replace', index=False)
 
 
 if __name__ == "__main__":
-    test_kanji = ['胤', '軋', '洟', '学']
-    results = get_vocab_from_jpdb(test_kanji)
-    print(results)
+    test_kanji = get_kanji_by_grade_number(10.0)
+    results = get_vocab_from_jpdb(test_kanji.head(10))
     write_goi_to_database(results)

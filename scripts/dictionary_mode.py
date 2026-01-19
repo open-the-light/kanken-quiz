@@ -3,6 +3,9 @@ import re
 import pandas as pd
 from pathlib import Path
 from jamdict import Jamdict
+from openai import OpenAI
+from scripts.database_helpers import get_example_sentences_for_kanji
+
 
 class DictionaryMode:
     def __init__(self) -> None:
@@ -23,6 +26,15 @@ class DictionaryMode:
         except Exception as e:
             print(e)
             print("Could not connect to database for some reason...")
+
+    def handle_search(self, word: str, client: OpenAI) -> None:
+        for kanji in word:
+            self.search_db(kanji=kanji)
+            examples = get_example_sentences_for_kanji(kanji, client)
+            print("Example Sentences:")
+            for s in examples["data"]:
+                print(f"{s["no"]}.: {s["sentence"]} \n ------ {s["translation"]}")
+            print("\n")
 
     def search_db(self, kanji: str) -> None:
         if len(kanji) == 1:

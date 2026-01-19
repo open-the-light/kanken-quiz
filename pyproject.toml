@@ -6,10 +6,14 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.14.3",
+    "jaconv>=0.4.1",
     "jamdict>=0.1a11.post2",
     "jamdict-data>=1.5",
     "lxml>=6.0.2",
+    "openai>=2.15.0",
     "pandas>=2.3.3",
     "prompt-toolkit>=3.0.52",
+    "pydantic>=2.12.5",
+    "python-dotenv>=1.2.1",
     "requests>=2.32.5",
 ]
