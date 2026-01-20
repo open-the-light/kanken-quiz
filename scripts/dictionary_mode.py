@@ -32,8 +32,8 @@ class DictionaryMode:
             self.search_db(kanji=kanji)
             examples = get_example_sentences_for_kanji(kanji, client)
             print("Example Sentences:")
-            for s in examples["data"]:
-                print(f"{s["no"]}.: {s["sentence"]} \n ------ {s["translation"]}")
+            for r in examples.itertuples():
+                print(f"{r.no}: {r.sentence} \n ------ {r.translation}")
             print("\n")
 
     def search_db(self, kanji: str) -> None:
