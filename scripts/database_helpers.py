@@ -53,19 +53,20 @@ def get_example_sentences_for_kanji(kanji: str, client: OpenAI) -> pd.DataFrame:
 
     response_object = client.chat.completions.parse(
         model = "gpt-5-nano",
+        reasoning_effort="minimal",
         messages = [
             {
                 "role": "system",
                 "content": (
                     "You work for a company that creates dictionaries, and your job is to create example sentences."
                     "You have great pride in your extensive vocabulary, and love to demonstrate this by creating rich, detailed sentences."
-                    "You will be generating sentences when provided with a character."
+                    "You will be generating sentences when provided with a character or word."
                     "Return the sentences as JSON following the attached schema."
                 )
             },
             {
                 "role": "user", 
-                "content": f"Generate five example sentences in Japanese that contain the character {kanji}."
+                "content": f"Generate two example sentences with {kanji}."
             }
         ],
         response_format = SentenceList,
@@ -75,6 +76,7 @@ def get_example_sentences_for_kanji(kanji: str, client: OpenAI) -> pd.DataFrame:
     rdata = SentenceList.model_validate_json(data).model_dump()
 
     df = pd.DataFrame(rdata['data'])
+
     add_sentences_to_db(df)
 
     return df
