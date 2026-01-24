@@ -3,13 +3,6 @@ import shutil
 from wcwidth import wcswidth
 from prompt_toolkit import prompt
 
-# from prompt_toolkit.application import Application
-# from prompt_toolkit.buffer import Buffer
-# from prompt_toolkit.key_binding import KeyBindings
-# from prompt_toolkit.layout import Layout
-# from prompt_toolkit.layout.containers import Window, HSplit, VSplit
-# from prompt_toolkit.layout.controls import BufferControl
-# from prompt_toolkit.layout.dimension import Dimension
 
 def display_width(s: str) -> int:
     w = wcswidth(s)
@@ -38,40 +31,3 @@ def centered_prompt(label: str = "") -> str:
 
     prompt_text = " " * pad + label
     return prompt(prompt_text)
-
-# def centered_input(width: int = 40) -> str:
-#     buf = Buffer()
-#     kb = KeyBindings()
-
-#     @kb.add("enter")
-#     def _enter(event):
-#         event.app.exit(result=buf.text)
-
-#     input_window = Window(
-#         BufferControl(buffer=buf),
-#         height=1,
-#         width=Dimension(preferred=width),
-#         wrap_lines=False,
-#     )
-
-#     row = VSplit(
-#         [
-#             Window(width=Dimension(weight=1)),   # left filler
-#             input_window,                        # fixed-width input
-#             Window(width=Dimension(weight=1)),   # right filler
-#         ],
-#         height=1,
-#         width=Dimension(weight=1),              # IMPORTANT: span full terminal width
-#     )
-
-#     root = HSplit(
-#         [row],
-#         width=Dimension(weight=1),              # IMPORTANT: span full terminal width
-#     )
-
-#     app = Application(
-#         layout=Layout(root),
-#         key_bindings=kb,
-#         full_screen=False,
-#     )
-#     return app.run()

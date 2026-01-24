@@ -4,7 +4,7 @@ from jamdict import Jamdict
 import pandas as pd
 
 grade_mapping = {
-    "配当外": 0.0,
+    "配当外": 1.0,
     "1級": 1.0,
     "1/準1級": 1.5,
     "準1級": 1.5,
@@ -45,6 +45,6 @@ def write_word_frequency_to_db() -> None:
 
 
 if __name__ == "__main__":
-    #df = read_kanken_kanji_list()
-    #write_kanken_kanji_list_to_db(df)
-    write_word_frequency_to_db()
+    df = read_kanken_kanji_list()
+    write_kanken_kanji_list_to_db(df)
+    #write_word_frequency_to_db()
